@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:camel="http://camel.apache.org/schema/blueprint"
+		xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
+		xsi:schemaLocation="
+				http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+				http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.1.0.xsd
+				http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+ 	<!-- osgi blueprint property placeholder -->
+	<cm:property-placeholder update-strategy="none" persistent-id="com.redhat.testDataSource">
+		<cm:default-properties>
+			<cm:property name="db.driver.class.name" value="org.h2.Driver" />
+			<cm:property name="db.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" />
+			<cm:property name="db.username" value="" />
+			<cm:property name="db.password" value="" />
+			<cm:property name="db.initial.size" value="10" />
+			<cm:property name="db.max.active" value="50" />
+		</cm:default-properties>
+	</cm:property-placeholder>
+
+	<bean id="testDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${db.driver.class.name}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="initialSize" value="${db.initial.size}" />
+		<property name="maxActive" value="${db.max.active}" />
+	</bean>
+
+	<service id="testDataSourceService" ref="testDataSource" interface="javax.sql.DataSource">
+		<service-properties>
+			<entry key="osgi.jndi.service.name" value="jdbc/testDataSource" />
+<!-- 			<entry key="datasource.name" value="testDataSource"/> -->
+		</service-properties>
+	</service>
+
+</blueprint>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/blueprint"
+	xsi:schemaLocation="
+      http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd
+      http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+
+
+	<!-- Main Service blueprint for Operator Information Service, ESB-1480 -->
+	<camelContext id="testRoutecontext" xmlns="http://camel.apache.org/schema/blueprint">
+
+		<route id="testRoute">
+			<from uri="direct:test" />
+			<to uri="bean:testDAO?method=persistTestModel" />
+		</route>
+
+	</camelContext>
+	
+	<reference id="testDAO" interface="com.redhat.dao.TestDAOService"/>
+</blueprint>
